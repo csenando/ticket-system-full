@@ -1,35 +1,27 @@
-import nodemailer from 'nodemailer';
-import dns from 'dns';
-
-// Forzar a Node.js a priorizar IPv4 sobre IPv6 para evitar el error ENETUNREACH en Render
-dns.setDefaultResultOrder('ipv4first');
+import { google } from 'googleapis';
 
 export class EmailService {
-    private transporter: nodemailer.Transporter;
-
-    constructor() {
-        this.transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true, // SSL
-            auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS,
-            }
-        });
-    }
-
     async sendTicketAssignedEmail(toEmail: string, agentName: string, ticketTitle: string, ticketId: string | number) {
-        if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-            console.warn('[EmailService] SMTP credentials not set. Skipping email notification.');
+        if (!process.env.GMAIL_CLIENT_ID || !process.env.GMAIL_CLIENT_SECRET || !process.env.GMAIL_REFRESH_TOKEN) {
+            console.warn('[EmailService] Faltan credenciales OAuth2. No se enviará el correo.');
             return;
         }
 
-        const mailOptions = {
-            from: `"Ticket System" <${process.env.SMTP_USER}>`,
-            to: toEmail,
-            subject: `📌 Nuevo Ticket Asignado: #${ticketId}`,
-            html: `
+        try {
+            const oAuth2Client = new google.auth.OAuth2(
+                process.env.GMAIL_CLIENT_ID,
+                process.env.GMAIL_CLIENT_SECRET,
+                'https://developers.google.com/oauthplayground'
+            );
+
+            oAuth2Client.setCredentials({ refresh_token: process.env.GMAIL_REFRESH_TOKEN });
+
+            const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
+
+            const subject = `📌 Nuevo Ticket Asignado: #${ticketId}`;
+            const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`;
+            
+            const htmlBody = `
             <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px;">
                 <div style="text-align: center; margin-bottom: 20px;">
                     <h2 style="color: #0f172a; margin: 0;">Sistema de Tickets</h2>
@@ -47,14 +39,35 @@ export class EmailService {
                     Este es un correo automático. Por favor no respondas a este mensaje.
                 </p>
             </div>
-            `
-        };
+            `;
 
-        try {
-            const info = await this.transporter.sendMail(mailOptions);
-            console.log(`[EmailService] Email sent to ${toEmail}: ${info.messageId}`);
-        } catch (error) {
-            console.error('[EmailService] Error sending email:', error);
+            const messageParts = [
+                `To: ${toEmail}`,
+                `Subject: ${utf8Subject}`,
+                `Content-Type: text/html; charset="UTF-8"`,
+                'MIME-Version: 1.0',
+                '',
+                htmlBody
+            ];
+            const message = messageParts.join('\\n');
+
+            // La API de Gmail requiere que el mensaje esté codificado en Base64 URL-safe
+            const encodedMessage = Buffer.from(message)
+                .toString('base64')
+                .replace(/\\+/g, '-')
+                .replace(/\\//g, '_')
+                .replace(/=+$/, '');
+
+            const res = await gmail.users.messages.send({
+                userId: 'me',
+                requestBody: {
+                    raw: encodedMessage
+                }
+            });
+
+            console.log(`[EmailService] Email enviado con éxito vía Gmail API: ${res.data.id}`);
+        } catch (error: any) {
+            console.error('[EmailService] Error enviando correo por Gmail API:', error.message);
         }
     }
 }
