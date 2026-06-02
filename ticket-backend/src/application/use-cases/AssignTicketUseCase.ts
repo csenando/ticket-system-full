@@ -31,7 +31,9 @@ export class AssignTicketUseCase {
         if (agentId !== null) {
             const agent = await this.userRepository.findById(agentId);
             if (agent && agent.email) {
-                await this.emailService.sendTicketAssignedEmail(agent.email, agent.name, ticket.title, ticketId.toString());
+                // No esperamos a que se envíe el correo para no bloquear la respuesta HTTP
+                this.emailService.sendTicketAssignedEmail(agent.email, agent.name, ticket.title, ticketId.toString())
+                    .catch(e => console.error('Error enviando correo de forma asíncrona:', e));
             }
         }
 
