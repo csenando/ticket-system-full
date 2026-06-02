@@ -1,4 +1,8 @@
 import nodemailer from 'nodemailer';
+import dns from 'dns';
+
+// Forzar a Node.js a priorizar IPv4 sobre IPv6 para evitar el error ENETUNREACH en Render
+dns.setDefaultResultOrder('ipv4first');
 
 export class EmailService {
     private transporter: nodemailer.Transporter;
