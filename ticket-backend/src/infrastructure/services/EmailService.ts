@@ -33,7 +33,7 @@ export class EmailService {
                 </div>
                 <p>Por favor, ingresa al sistema para revisar los detalles y comenzar a trabajar en él.</p>
                 <div style="text-align: center; margin-top: 30px;">
-                    <a href="https://ticket-system-frontend-rho.vercel.app/ticket/${ticketId}" style="background-color: #3b82f6; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Ver Ticket</a>
+                    <a href="https://ticket-system-frontend-rho.vercel.app/login" style="background-color: #3b82f6; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Iniciar Sesión</a>
                 </div>
                 <p style="font-size: 12px; color: #94a3b8; text-align: center; margin-top: 40px;">
                     Este es un correo automático. Por favor no respondas a este mensaje.
