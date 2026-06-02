@@ -152,7 +152,6 @@ export const Login: React.FC = () => {
                         <GoogleLogin
                             onSuccess={handleGoogleSuccess}
                             onError={() => setError('Google Login falló. Inténtalo de nuevo.')}
-                            useOneTap
                         />
                     </div>
                 </form>
