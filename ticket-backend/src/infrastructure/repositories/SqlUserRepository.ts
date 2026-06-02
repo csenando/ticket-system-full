@@ -12,6 +12,21 @@ export class SqlUserRepository {
         return result.recordset[0];
     }
 
+    async findById(id: number) {
+        const pool = getDbConnection();
+        const result = await pool.request()
+            .input('Id', sql.Int, id)
+            .query('SELECT * FROM Users WHERE Id = @Id');
+
+        if (result.recordset.length === 0) return null;
+        return {
+            id: result.recordset[0].Id,
+            name: result.recordset[0].Name,
+            email: result.recordset[0].Email,
+            role: result.recordset[0].Role
+        };
+    }
+
     async create(userData: { name: string; email: string; passwordHash: string; role: string }) {
         const pool = getDbConnection();
         const request = pool.request();
