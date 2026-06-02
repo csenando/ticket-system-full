@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, CheckCircle2, Clock, AlertTriangle, ChevronRight, BarChart3 } from 'lucide-react';
+import { LayoutDashboard, CheckCircle2, Clock, AlertTriangle, BarChart3 } from 'lucide-react';
 
 export const AnalyticsDashboard: React.FC = () => {
     const { token } = useAuth();
