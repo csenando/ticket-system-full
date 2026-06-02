@@ -22,7 +22,7 @@ export const Login: React.FC = () => {
         const payload = isRegister ? { name, email, password } : { email, password };
 
         try {
-            const response = await fetch(`http://localhost:3000${endpoint}`, {
+            const response = await fetch(`https://ticket-backend-api-lp89.onrender.com${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)

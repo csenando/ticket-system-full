@@ -22,8 +22,8 @@ export const TicketDetail: React.FC = () => {
     const fetchData = async () => {
         try {
             const [ticketRes, commentsRes] = await Promise.all([
-                fetch(`http://localhost:3000/api/tickets/${id}`, { headers: { 'Authorization': `Bearer ${token}` } }),
-                fetch(`http://localhost:3000/api/tickets/${id}/comments`, { headers: { 'Authorization': `Bearer ${token}` } })
+                fetch(`https://ticket-backend-api-lp89.onrender.com/api/tickets/${id}`, { headers: { 'Authorization': `Bearer ${token}` } }),
+                fetch(`https://ticket-backend-api-lp89.onrender.com/api/tickets/${id}/comments`, { headers: { 'Authorization': `Bearer ${token}` } })
             ]);
 
             if (!ticketRes.ok) throw new Error('Error al cargar el ticket');
@@ -31,12 +31,12 @@ export const TicketDetail: React.FC = () => {
             setTicket(await ticketRes.json());
             setComments(await commentsRes.json());
 
-            const agentsRes = await fetch('http://localhost:3000/api/users/agents', { headers: { 'Authorization': `Bearer ${token}` } });
+            const agentsRes = await fetch('https://ticket-backend-api-lp89.onrender.com/api/users/agents', { headers: { 'Authorization': `Bearer ${token}` } });
             if (agentsRes.ok) {
                 setAgents(await agentsRes.json());
             }
 
-            const usersRes = await fetch('http://localhost:3000/api/users', { headers: { 'Authorization': `Bearer ${token}` } });
+            const usersRes = await fetch('https://ticket-backend-api-lp89.onrender.com/api/users', { headers: { 'Authorization': `Bearer ${token}` } });
             if (usersRes.ok) {
                 setAllUsers(await usersRes.json());
             }
@@ -54,7 +54,7 @@ export const TicketDetail: React.FC = () => {
 
     const updateStatus = async (newStatus: string) => {
         try {
-            const res = await fetch(`http://localhost:3000/api/tickets/${id}/status`, {
+            const res = await fetch(`https://ticket-backend-api-lp89.onrender.com/api/tickets/${id}/status`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ export const TicketDetail: React.FC = () => {
 
     const updateAgent = async (agentId: number | null) => {
         try {
-            const res = await fetch(`http://localhost:3000/api/tickets/${id}/assign`, {
+            const res = await fetch(`https://ticket-backend-api-lp89.onrender.com/api/tickets/${id}/assign`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ agentId })
@@ -97,7 +97,7 @@ export const TicketDetail: React.FC = () => {
 
         setSubmitting(true);
         try {
-            const response = await fetch(`http://localhost:3000/api/tickets/${id}/comments`, {
+            const response = await fetch(`https://ticket-backend-api-lp89.onrender.com/api/tickets/${id}/comments`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',

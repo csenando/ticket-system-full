@@ -16,7 +16,7 @@ export const TicketForm: React.FC<Props> = ({ onTicketCreated }) => {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:3000/api/tickets', {
+            const response = await fetch('https://ticket-backend-api-lp89.onrender.com/api/tickets', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title, description })
