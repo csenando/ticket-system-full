@@ -49,13 +49,13 @@ export class EmailService {
                 '',
                 htmlBody
             ];
-            const message = messageParts.join('\\n');
+            const message = messageParts.join('\n');
 
             // La API de Gmail requiere que el mensaje esté codificado en Base64 URL-safe
             const encodedMessage = Buffer.from(message)
                 .toString('base64')
-                .replace(/\\+/g, '-')
-                .replace(/\\//g, '_')
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
                 .replace(/=+$/, '');
 
             const res = await gmail.users.messages.send({
