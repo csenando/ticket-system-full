@@ -146,7 +146,7 @@ export const Dashboard: React.FC = () => {
             {/* Sliding Drawer de Creación */}
             {isModalOpen && (
                 <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(4px)', zIndex: 100, transition: 'opacity 0.3s' }}>
-                    <div style={{ 
+                    <div className="ticket-modal" style={{ 
                         position: 'absolute', top: 0, right: 0, bottom: 0, width: '450px', backgroundColor: '#ffffff', 
                         boxShadow: '-10px 0 40px rgba(0,0,0,0.1)', padding: '2rem', display: 'flex', flexDirection: 'column',
                         animation: 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1)'

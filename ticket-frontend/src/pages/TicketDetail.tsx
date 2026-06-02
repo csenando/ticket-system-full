@@ -132,7 +132,7 @@ export const TicketDetail: React.FC = () => {
                 {/* Eliminados los Floating Actions */}
             </div>
 
-            <div style={{ display: 'flex', gap: '2rem', flex: 1, alignItems: 'flex-start' }}>
+            <div className="ticket-detail-container" style={{ display: 'flex', gap: '2rem', flex: 1, alignItems: 'flex-start' }}>
                 {/* Columna Principal: Detalles y Comentarios */}
                 <div style={{ flex: 3, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     <div className="panel">
