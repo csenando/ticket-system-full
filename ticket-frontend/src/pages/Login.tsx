@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
 
 export const Login: React.FC = () => {
     const [isRegister, setIsRegister] = useState(false);
@@ -32,6 +33,34 @@ export const Login: React.FC = () => {
 
             if (!response.ok) {
                 throw new Error(data.error || 'Error en la solicitud');
+            }
+
+            login(data.user, data.token);
+            navigate('/');
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleGoogleSuccess = async (credentialResponse: any) => {
+        setLoading(true);
+        setError('');
+        try {
+            const response = await fetch(`https://ticket-backend-api-lp89.onrender.com/api/auth/google`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    credential: credentialResponse.credential,
+                    clientId: "1066158919993-q2vspsikcch7rsj0n2e790vrvev698ea.apps.googleusercontent.com"
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Error al iniciar sesión con Google');
             }
 
             login(data.user, data.token);
@@ -111,6 +140,20 @@ export const Login: React.FC = () => {
                         >
                             {isRegister ? 'Inicia Sesión' : 'Regístrate aquí'}
                         </button>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', margin: '1.5rem 0' }}>
+                        <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--border-light)' }}></div>
+                        <span style={{ padding: '0 1rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>O continúa con</span>
+                        <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--border-light)' }}></div>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={() => setError('Google Login falló. Inténtalo de nuevo.')}
+                            useOneTap
+                        />
                     </div>
                 </form>
             </div>

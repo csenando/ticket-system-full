@@ -46,6 +46,48 @@ export class AuthUseCase {
         return { user: { id: user.Id, name: user.Name, email: user.Email, role: user.Role }, token };
     }
 
+    async loginWithGoogle(credential: string, clientId: string) {
+        const { OAuth2Client } = require('google-auth-library');
+        const client = new OAuth2Client(clientId);
+        
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: clientId,
+        });
+        
+        const payload = ticket.getPayload();
+        if (!payload || !payload.email || !payload.name) {
+            throw new Error('Invalid Google token');
+        }
+
+        const email = payload.email;
+        const name = payload.name;
+        
+        let user = await this.userRepository.findByEmail(email);
+        
+        if (!user) {
+            // Generar una contraseña aleatoria y larga para usuarios de Google
+            const crypto = require('crypto');
+            const randomPassword = crypto.randomBytes(32).toString('hex');
+            const passwordHash = await bcrypt.hash(randomPassword, 10);
+            
+            const role = email.includes('admin') ? 'Administrador' : 'Usuario Final';
+            
+            user = await this.userRepository.create({
+                name,
+                email,
+                passwordHash,
+                role
+            });
+            
+            // To ensure compatibility, find again to get proper casing if create returned different structure
+            user = await this.userRepository.findByEmail(email);
+        }
+        
+        const token = this.generateToken(user);
+        return { user: { id: user.Id, name: user.Name, email: user.Email, role: user.Role }, token };
+    }
+
     private generateToken(user: any) {
         return jwt.sign(
             { userId: user.Id, role: user.Role },

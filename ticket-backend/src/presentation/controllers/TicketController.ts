@@ -5,14 +5,19 @@ import { GetTicketByIdUseCase } from '../../application/use-cases/GetTicketByIdU
 import { UpdateTicketStatusUseCase } from '../../application/use-cases/UpdateTicketStatusUseCase';
 import { AssignTicketUseCase } from '../../application/use-cases/AssignTicketUseCase';
 import { SqlTicketRepository } from '../../infrastructure/repositories/SqlTicketRepository';
+import { SqlUserRepository } from '../../infrastructure/repositories/SqlUserRepository';
+import { EmailService } from '../../infrastructure/services/EmailService';
 import { AuthRequest } from '../middlewares/authMiddleware';
 
 const ticketRepository = new SqlTicketRepository();
+const userRepository = new SqlUserRepository();
+const emailService = new EmailService();
+
 const createTicketUseCase = new CreateTicketUseCase(ticketRepository);
 const getAllTicketsUseCase = new GetAllTicketsUseCase(ticketRepository);
 const getTicketByIdUseCase = new GetTicketByIdUseCase(ticketRepository);
 const updateTicketStatusUseCase = new UpdateTicketStatusUseCase(ticketRepository);
-const assignTicketUseCase = new AssignTicketUseCase(ticketRepository);
+const assignTicketUseCase = new AssignTicketUseCase(ticketRepository, userRepository, emailService);
 
 export class TicketController {
     static async assignAgent(req: AuthRequest, res: Response): Promise<void> {
