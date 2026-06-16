@@ -12,7 +12,7 @@ export const Dashboard: React.FC = () => {
     const fetchTickets = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://ticket-backend-api-lp89.onrender.com/api/tickets');
+            const response = await fetch('/api/tickets');
             if (!response.ok) {
                 throw new Error('Error de conexión con el backend.');
             }

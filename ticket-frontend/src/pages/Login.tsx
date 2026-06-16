@@ -23,7 +23,7 @@ export const Login: React.FC = () => {
         const payload = isRegister ? { name, email, password } : { email, password };
 
         try {
-            const response = await fetch(`https://ticket-backend-api-lp89.onrender.com${endpoint}`, {
+            const response = await fetch(`${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -48,12 +48,12 @@ export const Login: React.FC = () => {
         setLoading(true);
         setError('');
         try {
-            const response = await fetch(`https://ticket-backend-api-lp89.onrender.com/api/auth/google`, {
+            const response = await fetch(`/api/auth/google`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     credential: credentialResponse.credential,
-                    clientId: "1066158919993-q2vspsikcch7rsj0n2e790vrvev698ea.apps.googleusercontent.com"
+                    clientId: "1066158919993-8m0uhn6sjenl4scuj80fppab4gu8e2gd.apps.googleusercontent.com"
                 })
             });
 

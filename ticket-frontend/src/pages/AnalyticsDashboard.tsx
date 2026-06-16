@@ -10,7 +10,7 @@ export const AnalyticsDashboard: React.FC = () => {
     useEffect(() => {
         const fetchAllTickets = async () => {
             try {
-                const response = await fetch('https://ticket-backend-api-lp89.onrender.com/api/tickets', {
+                const response = await fetch('/api/tickets', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (response.ok) {

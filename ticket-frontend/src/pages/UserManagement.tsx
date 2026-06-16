@@ -18,7 +18,7 @@ export const UserManagement: React.FC = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('https://ticket-backend-api-lp89.onrender.com/api/users', {
+            const response = await fetch('/api/users', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (!response.ok) throw new Error('Error al cargar usuarios');
@@ -36,7 +36,7 @@ export const UserManagement: React.FC = () => {
 
     const handleRoleChange = async (userId: number, newRole: string) => {
         try {
-            const response = await fetch(`https://ticket-backend-api-lp89.onrender.com/api/users/${userId}/role`, {
+            const response = await fetch(`/api/users/${userId}/role`, {
                 method: 'PUT',
                 headers: { 
                     'Content-Type': 'application/json',

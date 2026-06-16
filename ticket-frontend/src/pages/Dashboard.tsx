@@ -29,7 +29,7 @@ export const Dashboard: React.FC = () => {
 
     const fetchTickets = async () => {
         try {
-            const response = await fetch('https://ticket-backend-api-lp89.onrender.com/api/tickets', {
+            const response = await fetch('/api/tickets', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -48,7 +48,7 @@ export const Dashboard: React.FC = () => {
         e.preventDefault();
         setSubmitting(true);
         try {
-            const response = await fetch('https://ticket-backend-api-lp89.onrender.com/api/tickets', {
+            const response = await fetch('/api/tickets', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
