@@ -144,7 +144,7 @@ export const TicketDetail: React.FC = () => {
                             <div style={{ marginTop: '1.5rem' }}>
                                 <h4 style={{ marginBottom: '0.5rem', fontSize: '0.875rem', color: 'var(--text-muted)' }}>Archivo Adjunto</h4>
                                 <img 
-                                    src={`http://localhost:3000${ticket.imageUrl}`} 
+                                    src={ticket.imageUrl} 
                                     alt="Captura adjunta" 
                                     style={{ maxWidth: '100%', maxHeight: '400px', borderRadius: '8px', border: '1px solid var(--border-light)' }} 
                                 />

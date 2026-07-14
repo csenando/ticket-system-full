@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+app.use('/api/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 app.get('/health', (req, res) => {
     res.json({ status: 'OK', message: 'Ticket System API is running' });

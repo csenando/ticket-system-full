@@ -86,7 +86,7 @@ export class TicketController {
             let imageUrl = null;
             if (req.file) {
                 // Return relative path for frontend to access via static server
-                imageUrl = `/uploads/${req.file.filename}`;
+                imageUrl = `/api/uploads/${req.file.filename}`;
             }
 
             const ticketData = { 
