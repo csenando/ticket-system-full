@@ -6,6 +6,9 @@ import { upload } from '../middlewares/uploadMiddleware';
 
 const router = Router();
 
+// Endpoint dedicated to serving images without nginx interference
+router.get('/image', TicketController.getImage);
+
 router.use(authenticateToken);
 
 router.post('/', upload.single('image'), TicketController.create);

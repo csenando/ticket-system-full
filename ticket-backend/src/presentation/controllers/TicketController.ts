@@ -9,6 +9,9 @@ import { SqlUserRepository } from '../../infrastructure/repositories/SqlUserRepo
 import { EmailService } from '../../infrastructure/services/EmailService';
 import { AuthRequest } from '../middlewares/authMiddleware';
 
+import fs from 'fs';
+import path from 'path';
+
 const ticketRepository = new SqlTicketRepository();
 const userRepository = new SqlUserRepository();
 const emailService = new EmailService();
@@ -20,6 +23,28 @@ const updateTicketStatusUseCase = new UpdateTicketStatusUseCase(ticketRepository
 const assignTicketUseCase = new AssignTicketUseCase(ticketRepository, userRepository, emailService);
 
 export class TicketController {
+    static async getImage(req: Request, res: Response): Promise<void> {
+        try {
+            const filename = req.query.file as string;
+            if (!filename) {
+                res.status(400).json({ error: 'Falta el nombre del archivo' });
+                return;
+            }
+            
+            // Validate to prevent directory traversal
+            const safeFilename = path.basename(filename);
+            const filepath = path.join(__dirname, '../../../public/uploads', safeFilename);
+            
+            if (fs.existsSync(filepath)) {
+                res.sendFile(filepath);
+            } else {
+                res.status(404).json({ error: 'Imagen no encontrada' });
+            }
+        } catch (error) {
+            res.status(500).json({ error: 'Error interno del servidor' });
+        }
+    }
+
     static async assignAgent(req: AuthRequest, res: Response): Promise<void> {
         try {
             const ticketId = parseInt(req.params.id as string);
