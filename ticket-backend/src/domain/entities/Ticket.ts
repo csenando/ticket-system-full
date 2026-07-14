@@ -9,6 +9,7 @@ export class Ticket {
         public readonly userId: number,
         public assignedAgentId?: number | null,
         public readonly createdAt?: Date,
-        public updatedAt?: Date | null
+        public updatedAt?: Date | null,
+        public imageUrl?: string | null
     ) {}
 }

@@ -83,12 +83,19 @@ export class TicketController {
                 return;
             }
 
+            let imageUrl = null;
+            if (req.file) {
+                // Return relative path for frontend to access via static server
+                imageUrl = `/uploads/${req.file.filename}`;
+            }
+
             const ticketData = { 
                 ...req.body, 
                 userId: req.user.userId,
                 priority: req.body.priority || 'Media',
                 status: req.body.status || 'Abierto',
-                category: req.body.category || 'Soporte'
+                category: req.body.category || 'Soporte',
+                imageUrl: imageUrl
             }; 
             const newTicket = await createTicketUseCase.execute(ticketData);
             res.status(201).json(newTicket);

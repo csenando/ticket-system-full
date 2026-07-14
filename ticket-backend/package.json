@@ -21,6 +21,7 @@
     "googleapis": "^173.0.0",
     "jsonwebtoken": "^9.0.3",
     "mssql": "^12.5.4",
+    "multer": "^2.2.0",
     "nodemailer": "^8.0.10"
   },
   "devDependencies": {
@@ -29,6 +30,7 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mssql": "^12.3.0",
+    "@types/multer": "^2.2.0",
     "@types/node": "^25.9.1",
     "@types/nodemailer": "^8.0.0",
     "nodemon": "^3.1.14",

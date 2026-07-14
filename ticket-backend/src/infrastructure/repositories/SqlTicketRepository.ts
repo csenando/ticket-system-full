@@ -15,11 +15,12 @@ export class SqlTicketRepository implements ITicketRepository {
         request.input('Category', sql.NVarChar, ticket.category);
         request.input('UserId', sql.Int, ticket.userId);
         request.input('AssignedAgentId', sql.Int, ticket.assignedAgentId);
+        request.input('ImageUrl', sql.NVarChar, ticket.imageUrl || null);
 
         const result = await request.query(`
-            INSERT INTO Tickets (Title, Description, Priority, Status, Category, UserId, AssignedAgentId, CreatedAt)
+            INSERT INTO Tickets (Title, Description, Priority, Status, Category, UserId, AssignedAgentId, ImageUrl, CreatedAt)
             OUTPUT inserted.*
-            VALUES (@Title, @Description, @Priority, @Status, @Category, @UserId, @AssignedAgentId, GETDATE())
+            VALUES (@Title, @Description, @Priority, @Status, @Category, @UserId, @AssignedAgentId, @ImageUrl, GETDATE())
         `);
 
         return this.mapToEntity(result.recordset[0]);
@@ -88,7 +89,8 @@ export class SqlTicketRepository implements ITicketRepository {
             row.UserId,
             row.AssignedAgentId,
             row.CreatedAt,
-            row.UpdatedAt
+            row.UpdatedAt,
+            row.ImageUrl
         );
     }
 }

@@ -2,12 +2,13 @@ import { Router } from 'express';
 import { TicketController } from '../controllers/TicketController';
 import { CommentController } from '../controllers/CommentController';
 import { authenticateToken, requireRole } from '../middlewares/authMiddleware';
+import { upload } from '../middlewares/uploadMiddleware';
 
 const router = Router();
 
 router.use(authenticateToken);
 
-router.post('/', TicketController.create);
+router.post('/', upload.single('image'), TicketController.create);
 router.get('/', TicketController.getAll);
 
 router.get('/:id', TicketController.getById);

@@ -25,6 +25,7 @@ export const Dashboard: React.FC = () => {
     const [newDesc, setNewDesc] = useState('');
     const [newCategory, setNewCategory] = useState('Hardware');
     const [newPriority, setNewPriority] = useState('Media');
+    const [imageFile, setImageFile] = useState<File | null>(null);
     const [submitting, setSubmitting] = useState(false);
 
     const fetchTickets = async () => {
@@ -48,18 +49,21 @@ export const Dashboard: React.FC = () => {
         e.preventDefault();
         setSubmitting(true);
         try {
+            const formData = new FormData();
+            formData.append('title', newTitle);
+            formData.append('description', newDesc);
+            formData.append('category', newCategory);
+            formData.append('priority', newPriority);
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+
             const response = await fetch('/api/tickets', {
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ 
-                    title: newTitle, 
-                    description: newDesc,
-                    category: newCategory,
-                    priority: newPriority
-                })
+                body: formData
             });
 
             if (!response.ok) throw new Error('Error al crear el ticket');
@@ -69,6 +73,7 @@ export const Dashboard: React.FC = () => {
             setNewDesc('');
             setNewCategory('Hardware');
             setNewPriority('Media');
+            setImageFile(null);
             fetchTickets(); // Refresh
         } catch(err: any) {
             alert(err.message);
@@ -193,10 +198,26 @@ export const Dashboard: React.FC = () => {
                                 <textarea required className="form-control" style={{ flex: 1, minHeight: '150px', resize: 'none' }} placeholder="Describe exactamente el problema, mensajes de error, y cuándo empezó a ocurrir..." value={newDesc} onChange={e => setNewDesc(e.target.value)} />
                             </div>
 
-                            {/* Dropzone visual simulada */}
-                            <div style={{ border: '2px dashed #cbd5e1', borderRadius: '8px', padding: '1.5rem', textAlign: 'center', backgroundColor: '#f8fafc', color: '#64748b', cursor: 'pointer', marginBottom: '1rem' }}>
-                                <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>📎</div>
-                                <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>Haz clic o arrastra capturas de pantalla aquí</span>
+                            <div className="form-group" style={{ marginBottom: '1rem' }}>
+                                <label className="form-label" style={{ fontWeight: '600', color: '#334155' }}>Adjuntar Imagen (Opcional)</label>
+                                <div style={{ border: '2px dashed #cbd5e1', borderRadius: '8px', padding: '1rem', backgroundColor: '#f8fafc', position: 'relative' }}>
+                                    <input 
+                                        type="file" 
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            if (e.target.files && e.target.files[0]) {
+                                                setImageFile(e.target.files[0]);
+                                            }
+                                        }}
+                                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                                    />
+                                    <div style={{ textAlign: 'center', color: '#64748b' }}>
+                                        <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>📎</div>
+                                        <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>
+                                            {imageFile ? imageFile.name : 'Haz clic o arrastra capturas de pantalla aquí'}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
 
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'auto', paddingTop: '1.5rem', borderTop: '1px solid #e2e8f0' }}>
